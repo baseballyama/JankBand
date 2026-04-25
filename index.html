@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JANK BAND — Acid Jazz & Fusion</title>
+  <meta name="description" content="Jank Band — 神奈川県川崎市を拠点に活動する雑食系社会人バンド。アシッドジャズ・フュージョンを中心に全国のジャズフェスティバルに出演。">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230c0b09'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='central' text-anchor='middle' fill='%23c9a84c' font-family='serif' font-style='italic' font-size='22'%3EJ%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;600;800;900&family=Noto+Sans+JP:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========================================
+       CSS Variables
+       ======================================== */
+    :root {
+      --bg-primary: #0c0b09;
+      --bg-secondary: #13110e;
+      --bg-tertiary: #1c1a16;
+      --bg-card: #171512;
+      --gold: #c9a84c;
+      --gold-light: #e6c06e;
+      --gold-dim: #6b5c2e;
+      --gold-glow: rgba(201, 168, 76, 0.12);
+      --text-primary: #f0ece4;
+      --text-secondary: #8a8578;
+      --text-tertiary: #4a4640;
+      --border: #2a2720;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 400;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection {
+      background: var(--gold);
+      color: var(--bg-primary);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(24px, 5vw, 80px);
+    }
+
+    /* ========================================
+       Grain Overlay
+       ======================================== */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 clamp(24px, 5vw, 80px);
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
+    }
+
+    .navbar.scrolled {
+      background-color: rgba(12, 11, 9, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+      animation: fadeIn 1s ease 1.6s both;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      animation: fadeIn 1s ease 1.6s both;
+    }
+
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--text-secondary);
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      animation: fadeIn 1s ease 1.6s both;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--gold);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .nav-hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(4px, 5px);
+    }
+
+    .nav-hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(4px, -5px);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(12, 11, 9, 0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+
+    .mobile-menu.active {
+      display: flex;
+    }
+
+    .mobile-menu a {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 2rem;
+      color: var(--text-primary);
+      transition: color 0.3s ease;
+    }
+
+    .mobile-menu a:hover {
+      color: var(--gold);
+    }
+
+    /* ========================================
+       Hero
+       ======================================== */
+    .hero {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: radial-gradient(ellipse at 50% 40%, #1a1714 0%, var(--bg-primary) 70%);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      line-height: 0.88;
+      margin-bottom: 2rem;
+    }
+
+    .hero-jank {
+      display: block;
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: clamp(5rem, 20vw, 22rem);
+      font-weight: 400;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+      text-shadow: 0 0 120px rgba(201, 168, 76, 0.1);
+      animation: heroSlideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+
+    .hero-band {
+      display: block;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: clamp(4.5rem, 18vw, 20rem);
+      color: var(--text-primary);
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 120px rgba(201, 168, 76, 0.1);
+      animation: heroSlideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
+    }
+
+    .hero-line {
+      width: min(280px, 60vw);
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 1.5rem;
+      transform-origin: center;
+      animation: lineExpand 0.8s ease 0.9s both;
+    }
+
+    .hero-subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      animation: fadeIn 1s ease 1.3s both;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeIn 1s ease 2s both;
+    }
+
+    .scroll-indicator span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+    }
+
+    .scroll-indicator::after {
+      content: '';
+      width: 1px;
+      height: 32px;
+      background: linear-gradient(to bottom, var(--gold-dim), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ========================================
+       Ticker / Marquee
+       ======================================== */
+    .ticker {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+      overflow: hidden;
+      background: var(--bg-secondary);
+    }
+
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: tickerScroll 25s linear infinite;
+    }
+
+    .ticker-content {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-shrink: 0;
+      padding-right: 0;
+    }
+
+    .ticker-content span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-dim);
+      white-space: nowrap;
+      padding: 0 1.5rem;
+    }
+
+    .ticker-content span.dot {
+      color: var(--gold);
+      padding: 0;
+      font-size: 0.5rem;
+    }
+
+    /* ========================================
+       Section Common
+       ======================================== */
+    .section {
+      padding: clamp(80px, 12vh, 160px) 0;
+      position: relative;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: clamp(2.5rem, 5vh, 4rem);
+    }
+
+    .section-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gold-dim);
+      letter-spacing: 0.1em;
+    }
+
+    .section-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ========================================
+       Reveal Animations
+       ======================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+    .reveal-delay-7 { transition-delay: 0.7s; }
+
+    /* ========================================
+       About Section
+       ======================================== */
+    #about {
+      background: var(--bg-primary);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: start;
+    }
+
+    .about-heading {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.2;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .about-heading em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .about-text {
+      font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+      color: var(--text-secondary);
+      line-height: 2;
+      font-weight: 300;
+    }
+
+    .about-text p + p {
+      margin-top: 1.2rem;
+    }
+
+    .about-quote {
+      position: relative;
+      padding: clamp(2rem, 4vw, 3rem);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      align-self: center;
+    }
+
+    .about-quote::before {
+      content: '"';
+      font-family: 'Instrument Serif', serif;
+      font-size: 6rem;
+      color: var(--gold-dim);
+      position: absolute;
+      top: -0.5rem;
+      left: 1.5rem;
+      line-height: 1;
+      opacity: 0.5;
+    }
+
+    .about-quote blockquote {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+      color: var(--text-primary);
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-quote .quote-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-dim);
+      margin-top: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    /* ========================================
+       Members Section
+       ======================================== */
+    #members {
+      background: var(--bg-secondary);
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .member-card {
+      background: var(--bg-secondary);
+      padding: clamp(1.5rem, 2.5vw, 2.5rem);
+      position: relative;
+      overflow: hidden;
+      transition: background-color 0.4s ease;
+    }
+
+    .member-card::before {
+      content: attr(data-instrument);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: clamp(3rem, 5vw, 5rem);
+      color: var(--text-tertiary);
+      opacity: 0.15;
+      position: absolute;
+      right: -0.2rem;
+      bottom: -0.5rem;
+      line-height: 1;
+      transition: opacity 0.4s ease, color 0.4s ease;
+    }
+
+    .member-card:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .member-card:hover::before {
+      opacity: 0.25;
+      color: var(--gold-dim);
+    }
+
+    .member-instrument {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .member-name {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 500;
+      font-size: clamp(1rem, 1.3vw, 1.2rem);
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .member-name-en {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      margin-top: 0.3rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ========================================
+       Live Section
+       ======================================== */
+    #live {
+      background: var(--bg-primary);
+    }
+
+    .live-upcoming {
+      margin-bottom: clamp(3rem, 6vh, 5rem);
+    }
+
+    .live-upcoming-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .live-upcoming-label .pulse {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .upcoming-card {
+      border: 1px solid var(--gold-dim);
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+      padding: clamp(2rem, 4vw, 3.5rem);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: clamp(1.5rem, 3vw, 3rem);
+      align-items: center;
+    }
+
+    .upcoming-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .upcoming-date {
+      text-align: center;
+    }
+
+    .upcoming-date .year {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-dim);
+    }
+
+    .upcoming-date .day {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .upcoming-date .month {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+    }
+
+    .upcoming-info h3 {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      color: var(--text-primary);
+      margin-bottom: 0.8rem;
+    }
+
+    .upcoming-info .venue,
+    .upcoming-info .time-slot {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    .upcoming-info .venue::before {
+      content: '◆ ';
+      color: var(--gold-dim);
+      font-size: 0.6rem;
+    }
+
+    .upcoming-info .time-slot::before {
+      content: '◆ ';
+      color: var(--gold-dim);
+      font-size: 0.6rem;
+    }
+
+    .upcoming-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-transform: uppercase;
+      writing-mode: vertical-lr;
+      text-orientation: mixed;
+      border-left: 1px solid var(--gold-dim);
+      padding-left: 1rem;
+    }
+
+    .past-section-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .past-cities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+
+    .past-city {
+      flex: 1;
+      min-width: 200px;
+      padding: clamp(1.5rem, 2.5vw, 2.5rem);
+      border: 1px solid var(--border);
+      margin: -0.5px;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .past-city:hover {
+      background: var(--bg-secondary);
+      border-color: var(--gold-dim);
+    }
+
+    .past-city .city-name {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      color: var(--text-primary);
+      margin-bottom: 0.3rem;
+    }
+
+    .past-city .city-detail {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+    }
+
+    /* ========================================
+       Videos Section
+       ======================================== */
+    #videos {
+      background: var(--bg-secondary);
+    }
+
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .video-slot {
+      aspect-ratio: 16/9;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease;
+    }
+
+    .video-slot:hover {
+      border-color: var(--gold-dim);
+    }
+
+    .video-slot .play-icon {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--text-tertiary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .video-slot:hover .play-icon {
+      border-color: var(--gold);
+      transform: scale(1.05);
+    }
+
+    .video-slot .play-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--text-tertiary);
+      margin-left: 2px;
+      transition: fill 0.3s ease;
+    }
+
+    .video-slot:hover .play-icon svg {
+      fill: var(--gold);
+    }
+
+    .video-slot .video-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      background: var(--bg-primary);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--gold-dim);
+    }
+
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-tertiary);
+      letter-spacing: 0.1em;
+    }
+
+    /* ========================================
+       Keyframes
+       ======================================== */
+    @keyframes heroSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes lineExpand {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 0.8; transform: scaleY(1.2); }
+    }
+
+    @keyframes tickerScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(201, 168, 76, 0); }
+    }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+    @media (max-width: 1024px) {
+      .members-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hamburger {
+        display: flex;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .members-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .upcoming-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .upcoming-badge {
+        writing-mode: horizontal-tb;
+        border-left: none;
+        border-top: 1px solid var(--gold-dim);
+        padding-left: 0;
+        padding-top: 1rem;
+        text-align: center;
+      }
+
+      .upcoming-info .venue,
+      .upcoming-info .time-slot {
+        justify-content: center;
+      }
+
+      .past-cities {
+        flex-direction: column;
+      }
+
+      .past-city {
+        min-width: 100%;
+      }
+
+      .videos-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-jank {
+        font-size: clamp(4rem, 22vw, 10rem);
+      }
+
+      .hero-band {
+        font-size: clamp(3.5rem, 20vw, 9rem);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .members-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Grain Overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="メインナビゲーション">
+    <a href="#" class="nav-logo">Jank Band</a>
+    <div class="nav-links">
+      <a href="#about">ABOUT</a>
+      <a href="#members">MEMBERS</a>
+      <a href="#live">LIVE</a>
+      <a href="#videos">VIDEOS</a>
+    </div>
+    <div class="nav-hamburger" aria-label="メニュー" role="button" tabindex="0">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" aria-hidden="true">
+    <a href="#about">About</a>
+    <a href="#members">Members</a>
+    <a href="#live">Live</a>
+    <a href="#videos">Videos</a>
+  </div>
+
+  <!-- Hero -->
+  <header class="hero" id="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="hero-jank">Jank</span>
+        <span class="hero-band">BAND</span>
+      </h1>
+      <div class="hero-line"></div>
+      <p class="hero-subtitle">Acid Jazz &amp; Fusion from Kawasaki</p>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+    </div>
+  </header>
+
+  <!-- Ticker -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <div class="ticker-content">
+        <span>ACID JAZZ</span><span class="dot">●</span>
+        <span>FUSION</span><span class="dot">●</span>
+        <span>GROOVE</span><span class="dot">●</span>
+        <span>KAWASAKI</span><span class="dot">●</span>
+        <span>LIVE SESSIONS</span><span class="dot">●</span>
+        <span>TROMBONE</span><span class="dot">●</span>
+        <span>TRUMPET</span><span class="dot">●</span>
+        <span>SAXOPHONE</span><span class="dot">●</span>
+        <span>KEYS</span><span class="dot">●</span>
+        <span>GUITAR</span><span class="dot">●</span>
+        <span>BASS</span><span class="dot">●</span>
+        <span>DRUMS</span><span class="dot">●</span>
+        <span>VOCALS</span><span class="dot">●</span>
+        <span>EWI</span><span class="dot">●</span>
+      </div>
+      <div class="ticker-content">
+        <span>ACID JAZZ</span><span class="dot">●</span>
+        <span>FUSION</span><span class="dot">●</span>
+        <span>GROOVE</span><span class="dot">●</span>
+        <span>KAWASAKI</span><span class="dot">●</span>
+        <span>LIVE SESSIONS</span><span class="dot">●</span>
+        <span>TROMBONE</span><span class="dot">●</span>
+        <span>TRUMPET</span><span class="dot">●</span>
+        <span>SAXOPHONE</span><span class="dot">●</span>
+        <span>KEYS</span><span class="dot">●</span>
+        <span>GUITAR</span><span class="dot">●</span>
+        <span>BASS</span><span class="dot">●</span>
+        <span>DRUMS</span><span class="dot">●</span>
+        <span>VOCALS</span><span class="dot">●</span>
+        <span>EWI</span><span class="dot">●</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-label reveal">
+        <span class="section-num">01</span>
+        <span class="section-name">About</span>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="about-grid">
+        <div class="reveal reveal-delay-1">
+          <h2 class="about-heading">
+            <em>雑食系</em>社会人バンド、<br>川崎から全国へ。
+          </h2>
+          <div class="about-text">
+            <p>
+              神奈川県川崎市のスタジオと焼肉屋を拠点に活動する、8人組の社会人バンド。アシッドジャズやフュージョンを中心に、ジャンルの垣根を超えた"雑食"なサウンドを追求しています。
+            </p>
+            <p>
+              仙台、金沢、札幌、北九州など全国各地のジャズフェスティバルに出演。音楽と旅を両方楽しみながら、ステージごとに新しい出会いとグルーヴを生み出しています。
+            </p>
+          </div>
+        </div>
+
+        <div class="about-quote reveal reveal-delay-2">
+          <blockquote>
+            音楽と旅を両方楽しむ。<br>それが Jank Band のスタイル。
+          </blockquote>
+          <div class="quote-label">— Band Philosophy</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Members Section -->
+  <section class="section" id="members">
+    <div class="container">
+      <div class="section-label reveal">
+        <span class="section-num">02</span>
+        <span class="section-name">Members</span>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="members-grid">
+        <div class="member-card reveal" data-instrument="Tb">
+          <div class="member-instrument">Tb. / Key.</div>
+          <div class="member-name">染谷 慧</div>
+        </div>
+        <div class="member-card reveal reveal-delay-1" data-instrument="Tp">
+          <div class="member-instrument">Tp. / EWI</div>
+          <div class="member-name">植野 創</div>
+        </div>
+        <div class="member-card reveal reveal-delay-2" data-instrument="Sax">
+          <div class="member-instrument">A.Sax. / EWI</div>
+          <div class="member-name">宮城 拓実</div>
+        </div>
+        <div class="member-card reveal reveal-delay-3" data-instrument="Vo">
+          <div class="member-instrument">Vo. / Perc.</div>
+          <div class="member-name">瀧澤 友花里</div>
+        </div>
+        <div class="member-card reveal reveal-delay-4" data-instrument="Bs">
+          <div class="member-instrument">Bass</div>
+          <div class="member-name">瀧澤 巧</div>
+        </div>
+        <div class="member-card reveal reveal-delay-5" data-instrument="Gt">
+          <div class="member-instrument">Gt. / Cho.</div>
+          <div class="member-name">近藤 寛司</div>
+        </div>
+        <div class="member-card reveal reveal-delay-6" data-instrument="Key">
+          <div class="member-instrument">Keyboards</div>
+          <div class="member-name">髙橋 友</div>
+        </div>
+        <div class="member-card reveal reveal-delay-7" data-instrument="Dr">
+          <div class="member-instrument">Drums</div>
+          <div class="member-name">山下 裕一朗</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Section -->
+  <section class="section" id="live">
+    <div class="container">
+      <div class="section-label reveal">
+        <span class="section-num">03</span>
+        <span class="section-name">Live</span>
+        <span class="section-line"></span>
+      </div>
+
+      <!-- Upcoming -->
+      <div class="live-upcoming reveal reveal-delay-1">
+        <div class="live-upcoming-label">
+          <span class="pulse"></span>
+          <span>Next Show</span>
+        </div>
+
+        <div class="upcoming-card">
+          <div class="upcoming-date">
+            <div class="year">2026</div>
+            <div class="month">TBD</div>
+          </div>
+          <div class="upcoming-info">
+            <h3>びわこジャズ東近江 2026</h3>
+            <div class="venue">会場：法務局前ホコテン</div>
+            <div class="time-slot">時間：14:00 〜 14:40</div>
+          </div>
+          <div class="upcoming-badge">Biwako Jazz</div>
+        </div>
+      </div>
+
+      <!-- Past Performances -->
+      <div class="reveal reveal-delay-2">
+        <div class="past-section-title">Past Festivals</div>
+        <div class="past-cities">
+          <div class="past-city">
+            <div class="city-name">仙台</div>
+            <div class="city-detail">Sendai Jazz Festival</div>
+          </div>
+          <div class="past-city">
+            <div class="city-name">金沢</div>
+            <div class="city-detail">Kanazawa Jazz Festival</div>
+          </div>
+          <div class="past-city">
+            <div class="city-name">札幌</div>
+            <div class="city-detail">Sapporo Jazz Festival</div>
+          </div>
+          <div class="past-city">
+            <div class="city-name">北九州</div>
+            <div class="city-detail">Kitakyushu Jazz Festival</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Videos Section -->
+  <section class="section" id="videos">
+    <div class="container">
+      <div class="section-label reveal">
+        <span class="section-num">04</span>
+        <span class="section-name">Videos</span>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="videos-grid">
+        <div class="video-slot reveal reveal-delay-1">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+          </div>
+          <span class="video-label">Coming Soon</span>
+        </div>
+        <div class="video-slot reveal reveal-delay-2">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+          </div>
+          <span class="video-label">Coming Soon</span>
+        </div>
+        <div class="video-slot reveal reveal-delay-3">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+          </div>
+          <span class="video-label">Coming Soon</span>
+        </div>
+        <div class="video-slot reveal reveal-delay-4">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+          </div>
+          <span class="video-label">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">Jank Band</span>
+        <span class="footer-copy">&copy; 2026 JANK BAND. ALL RIGHTS RESERVED.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ========================================
+    // Scroll Reveal (Intersection Observer)
+    // ========================================
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // ========================================
+    // Navbar Background on Scroll
+    // ========================================
+    const navbar = document.querySelector('.navbar');
+    let lastScrollY = 0;
+
+    function updateNavbar() {
+      const scrollY = window.scrollY;
+      if (scrollY > 60) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+      lastScrollY = scrollY;
+    }
+
+    window.addEventListener('scroll', updateNavbar, { passive: true });
+
+    // ========================================
+    // Mobile Menu Toggle
+    // ========================================
+    const hamburger = document.querySelector('.nav-hamburger');
+    const mobileMenu = document.querySelector('.mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      mobileMenu.setAttribute('aria-hidden', !mobileMenu.classList.contains('active'));
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    hamburger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        hamburger.click();
+      }
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // ========================================
+    // Smooth Anchor Scroll
+    // ========================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
